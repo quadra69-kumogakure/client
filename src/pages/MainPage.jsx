@@ -21,11 +21,11 @@ function MainPage() {
         setIsLoading(true);
 
         try {
-            const {data} = await apiRequest({
-                method : 'GET',
-                url : '/user-data',
-                headers : {
-                    Authorization : `Bearer ${localStorage.getItem("token")}`
+            const { data } = await apiRequest({
+                method: 'GET',
+                url: '/user-data',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
 
@@ -40,11 +40,11 @@ function MainPage() {
     const fetchConversations = async () => {
         setIsLoading(true);
         try {
-            const {data} = await apiRequest({
-                method : 'GET',
-                url : '/conversations',
-                headers : {
-                    Authorization : `Bearer ${localStorage.getItem("token")}`
+            const { data } = await apiRequest({
+                method: 'GET',
+                url: '/conversations',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             })
 
@@ -59,14 +59,14 @@ function MainPage() {
     const fetchConvo = async () => {
         try {
             if (currentConvoId) {
-                const {data} = await apiRequest({
-                    method : 'GET',
-                    url : `/conversations/${currentConvoId}`,
-                    headers : {
-                        Authorization : `Bearer ${localStorage.getItem("token")}`
+                const { data } = await apiRequest({
+                    method: 'GET',
+                    url: `/conversations/${currentConvoId}`,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
                 });
-    
+
                 setConvo(data);
             }
         } catch (error) {
@@ -88,17 +88,14 @@ function MainPage() {
     }, [currentConvoId])
 
     return (
-        <div className="flex flex-row h-screen justify-center items-center bg-sky-100">
-            <div className="grid grid-cols-12 rounded-lg overflow-hidden h-3/4 shadow-lg max-w-7xl">
-                {isLoading ? (<>
-                    <p>Tunggu dulu ya...</p>
-                </>) : (<>
-                    <SideBar userData={userData}/>
-                    <MessageList convoList={convoList} handleConvo={handleConvo}/>
-                </>)}
-                <ChatRoom currentConvo={currentConvo} fetchConvo={fetchConvo} fetchConversations={fetchConversations}/>
-            </div>
-        </div>
+        <>
+            {isLoading ? (<>
+                <p>Tunggu dulu ya...</p>
+            </>) : (<>
+                <MessageList convoList={convoList} handleConvo={handleConvo} />
+            </>)}
+            <ChatRoom currentConvo={currentConvo} fetchConvo={fetchConvo} fetchConversations={fetchConversations} />
+        </>
     )
 };
 
