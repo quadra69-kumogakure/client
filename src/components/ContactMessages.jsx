@@ -1,7 +1,9 @@
+import socket from "../utils/socket";
 
 function ContactMessages({ convoList, handleConvo }) {
     const handleClick = (conversationId) => {
         handleConvo(conversationId); 
+        socket.emit("join-conversation", conversationId);
     };
 
     return (

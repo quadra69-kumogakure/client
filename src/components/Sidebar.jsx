@@ -8,6 +8,7 @@ import socket from "../utils/socket";
 
 function SideBar() {
     const [userData, setUserData] = useState({});
+    
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();

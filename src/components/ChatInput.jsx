@@ -11,6 +11,7 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
 
     const handleChatSubmit = async (event) => {
         event.preventDefault();
+        console.log(currentConvo, "<<<")
         try {
             const response = await apiRequest({
                 method : "POST",
@@ -25,8 +26,11 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
             })
 
             fetchConvo();
-            fetchConversations();
-            socket.emit("sent-message", currentConvo.conversation.id, message);
+            // fetchConversations();
+            socket.emit("sent-message", {
+                conversationId: currentConvo.conversation.id,
+                message
+            });
         } catch (error) {
             console.log(error)
         }

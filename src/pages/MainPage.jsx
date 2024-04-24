@@ -25,6 +25,7 @@ function MainPage() {
             })
 
             setConvoList(data.details);
+            console.log(data, ">>>>")
         } catch (error) {
             console.log(error);
         } finally {
@@ -44,7 +45,7 @@ function MainPage() {
                 });
 
                 setConvo(data);
-                socket.emit("join-conversation", currentConvoId);
+                window.scrollTo(0)
             }
         } catch (error) {
             console.log(error)
@@ -52,6 +53,7 @@ function MainPage() {
     }
 
     const handleConvo = (event) => {
+        console.log(event, "Convo")
         setConvoId(event)
     };
 
@@ -64,11 +66,17 @@ function MainPage() {
     }, [currentConvoId])
 
     useEffect(() => {
-        socket.on("sent-message", (message) => {
-            console.log(`${message}`)
-            fetchConvo()
+        socket.off("sent-message")
+        socket.on("sent-message", (id, message) => {
+            console.log(`${message} --- [${id}, ${currentConvoId}]`)
+            // setConvoId(id);
+            if (currentConvoId === id) {
+                fetchConvo()
+            }
         });
-    }, []);
+        return () => {
+        }
+    }, [currentConvoId]);
 
     return (
         <>
