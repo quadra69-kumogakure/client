@@ -1,11 +1,15 @@
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 function ChatMessages({ currentConvo }) {
     let current_user = currentConvo.current_user;
     let messages = currentConvo.conversation.Messages;
     // let participantWithId2 = participants.find(participant => participant.UserId === 2);
 
+
+
     return (
         <div className="grow flex flex-col gap-2 overflow-auto py-2">
+            <ScrollToBottom className='overflow-auto'>
             {messages.map((message) => (
                 <div key={message.id}>
                     {message.User.id === current_user.id ? (
@@ -43,6 +47,7 @@ function ChatMessages({ currentConvo }) {
                     )}
                 </div>
             ))}
+            </ScrollToBottom>
         </div>
     );
 }
