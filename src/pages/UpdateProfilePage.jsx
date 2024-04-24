@@ -40,8 +40,10 @@ function UpdateProfilePage() {
     async function handleSubmit(event) {
       try {
         console.log(userData);
-        event.preventDefault();
-        if (UserId) {
+        // event.preventDefault();
+        console.log(UserId,"ksadjklajdklaj")
+        console.log(localStorage.access_token,'kadjasjdlkasjd')
+        if (userData) {
           await apiRequest({
             method: "put",
             url: `/update-profile`,
@@ -50,7 +52,7 @@ function UpdateProfilePage() {
                 lastName: userData.lastName,
                 profilePicture: userData.profilePicture,
             },
-            headers: { authorization: `Bearer ${localStorage.access_token}` },
+            headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
           });
         }
         navigate("/");
