@@ -1,41 +1,17 @@
-import SideBar from "../components/Sidebar";
 import MessageList from "../components/MessageList";
 import ChatRoom from "../components/ChatRoom";
 
-import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import { apiRequest } from "../utils/axios";
-
-// const socket = io("http://localhost:3000")
+import socket from "../utils/socket";
 
 
 function MainPage() {
-    const [userData, setUserData] = useState({});
     const [convoList, setConvoList] = useState([]);
     const [currentConvo, setConvo] = useState({});
     const [currentConvoId, setConvoId] = useState();
 
     const [isLoading, setIsLoading] = useState(true);
-
-    const fetchUserData = async () => {
-        setIsLoading(true);
-
-        try {
-            const { data } = await apiRequest({
-                method: 'GET',
-                url: '/user-data',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-
-            setUserData(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setIsLoading(false)
-        }
-    };
 
     const fetchConversations = async () => {
         setIsLoading(true);
@@ -79,7 +55,10 @@ function MainPage() {
     };
 
     useEffect(() => {
-        fetchUserData()
+
+    }, []);
+
+    useEffect(() => {
         fetchConversations()
     }, []);
 
