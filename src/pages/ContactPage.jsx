@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import { apiRequest } from "../utils/axios";
-import ContactDetail from "../components/ContactDetail";
+import { useEffect, useState } from "react"
+import { apiRequest } from "../utils/axios"
+import ContactDetail from "../components/ContactDetail"
 
 function ContactPage() {
   const [dataContacts, setDataContacts] = useState([])
   const [isLoading, setIsLoading] = useState(true);
+  const [currentContact, setCurrentContact] = useState({})
+  const [currentContactId, setCurrentContactId] = useState()
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -24,9 +26,38 @@ function ContactPage() {
     }
   }
 
+  const fetchDetail = async () => {
+    try {
+      if(currentContactId) {
+        const {data} = await apiRequest({
+          url: `/contacts/${currentContactId}`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        })
+        setCurrentContact(data.contact)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleContact = (contactId) => {
+    setCurrentContactId(contactId)
+  }
+
+  const handleClick = (contactId) => {
+    handleContact(contactId);
+  };
+
   useEffect(() => {
     fetchData()
   }, [])
+
+  useEffect(() => {
+    fetchDetail()
+  }, [currentContactId])
 
 
   return (<>
@@ -36,21 +67,21 @@ function ContactPage() {
       {isLoading ? (
         <p>Tunggu dulu ya...</p>
       ) : (
-        <ul role="list" className="p-6 divide-y divide-slate-200 hover:bg-blue-300 hover:rounded-md hover:bg-opacity-20">
+        <ul role="list" className="p-6 divide-y divide-slate-200">
           {dataContacts.map((el) => (
-            <li key={el.id} className="flex py-4 first:pt-0 last:pb-0 relative group">
-              <img className="h-10 w-10 rounded-full" src={el.User.profilePicture} alt="Profile Picture" />
+            <div key={el.id} onClick={() => handleClick(el.id)} className="flex py-4 first:pt-0 last:pb-0 relative group hover:cursor-pointer">
+              <img className="h-10 w-10 rounded-full" src={el.friend.profilePicture} alt="Profile Picture" />
               <div className="ml-3 flex flex-col overflow-hidden">
-                <a href="#" className="text-sm font-medium text-slate-900">{el.User.firstName}{el.User.lastName}</a>
-                <a href= "#" className="text-sm text-slate-500 truncate">{el.User.email}</a>
+                <p href="#" className="text-sm font-medium text-slate-900">{`${el.friend.firstName} ${el.friend.lastName}`}</p>
+                <p href= "#" className="text-sm text-slate-500 truncate">{el.friend.email}</p>
               </div>
-            </li>
+            </div>
           ))}
         </ul>
       )}
     </div>
     <div className="col-span-5 flex flex-col bg-slate-50 px-3 py-5 overflow-auto">
-    <ContactDetail />
+    <ContactDetail contact={currentContact} contactId={currentContactId} />
     </div>
   </>)
 };
