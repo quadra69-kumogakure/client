@@ -11,7 +11,6 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
 
     const handleChatSubmit = async (event) => {
         event.preventDefault();
-        console.log(currentConvo, "<<<")
         try {
             const response = await apiRequest({
                 method : "POST",
@@ -31,21 +30,18 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
                 conversationId: currentConvo.conversation.id,
                 message
             });
+            event.target.message.value = "";
         } catch (error) {
             console.log(error)
         }
     }
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <div className="flex-none">
             <form onSubmit={handleChatSubmit}>
                 <div className="flex bg-slate-100 rounded-full px-3 py-2">
                     <input type="text" name="message" placeholder="Type Something..." id=""
-                        className="bg-slate-100 grow"
+                        className="bg-slate-100 grow outline-none"
                         onChange={handleInputChange}
                     />
                     <button>

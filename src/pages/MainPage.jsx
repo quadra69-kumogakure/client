@@ -45,7 +45,6 @@ function MainPage() {
                 });
 
                 setConvo(data);
-                window.scrollTo(0)
             }
         } catch (error) {
             console.log(error)
