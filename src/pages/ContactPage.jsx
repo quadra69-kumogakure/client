@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../utils/axios";
+import ContactDetail from "../components/ContactDetail";
 
 function ContactPage() {
   const [dataContacts, setDataContacts] = useState([])
@@ -48,10 +49,9 @@ function ContactPage() {
         </ul>
       )}
     </div>
-
-
-
-
+    <div className="col-span-5 flex flex-col bg-slate-50 px-3 py-5 overflow-auto">
+    <ContactDetail />
+    </div>
   </>)
 };
 
