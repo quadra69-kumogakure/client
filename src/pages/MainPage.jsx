@@ -44,6 +44,7 @@ function MainPage() {
                 });
 
                 setConvo(data);
+                socket.emit("join-conversation", currentConvoId);
             }
         } catch (error) {
             console.log(error)
@@ -55,16 +56,19 @@ function MainPage() {
     };
 
     useEffect(() => {
-
-    }, []);
-
-    useEffect(() => {
         fetchConversations()
     }, []);
 
     useEffect(() => {
         fetchConvo()
     }, [currentConvoId])
+
+    useEffect(() => {
+        socket.on("sent-message", (message) => {
+            console.log(`${message}`)
+            fetchConvo()
+        });
+    }, []);
 
     return (
         <>

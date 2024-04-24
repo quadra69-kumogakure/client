@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { apiRequest } from "../utils/axios";
+import socket from "../utils/socket";
 
 function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
     const [message, setMessage] = useState("");
@@ -11,8 +12,6 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
     const handleChatSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log(message, currentConvo.conversation.id)
-
             const response = await apiRequest({
                 method : "POST",
                 url : "/messages",
@@ -27,10 +26,15 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
 
             fetchConvo();
             fetchConversations();
+            socket.emit("sent-message", currentConvo.conversation.id, message);
         } catch (error) {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+
+    }, []);
 
     return (
         <div className="flex-none">

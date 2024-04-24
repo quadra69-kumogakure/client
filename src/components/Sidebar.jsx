@@ -3,6 +3,8 @@ import ProfileInfo from "./ProfileInfo";
 import { NavLink, useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils/axios";
 
+import socket from "../utils/socket";
+
 
 function SideBar() {
     const [userData, setUserData] = useState({});
@@ -23,7 +25,6 @@ function SideBar() {
             });
 
             setUserData(data);
-            console.log(data, "?????////");
         } catch (error) {
             console.log(error);
         } finally {
@@ -33,7 +34,7 @@ function SideBar() {
 
     useEffect(() => {
         fetchUserData()
-    }, [])
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
