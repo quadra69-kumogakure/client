@@ -7,6 +7,7 @@ function ContactPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentContact, setCurrentContact] = useState({})
   const [currentContactId, setCurrentContactId] = useState()
+  const [alias, setAlias] = useState("")
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -58,10 +59,25 @@ function ContactPage() {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
+        },
       });
       const updatedContacts = dataContacts.filter((contact) => contact.friend.id !== contactId)
       setDataContacts(updatedContacts)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleUpdateContact = async (contactId) => {
+    try {
+      await apiRequest({
+        url: `/contacts/${contactId}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        data: alias
+      })
     } catch (error) {
       console.log(error)
     }
@@ -88,8 +104,8 @@ function ContactPage() {
             <div key={el.id} onClick={() => handleClick(el.id)} className="flex py-4 first:pt-0 last:pb-0 relative group hover:cursor-pointer">
               <img className="h-10 w-10 rounded-full" src={el.friend.profilePicture} alt="Profile Picture" />
               <div className="ml-3 flex flex-col overflow-hidden">
-                <p href="#" className="text-sm font-medium text-slate-900">{`${el.friend.firstName} ${el.friend.lastName}`}</p>
-                <p href= "#" className="text-sm text-slate-500 truncate">{el.friend.email}</p>
+                <p className="text-sm font-medium text-slate-900">{`${el.friend.firstName} ${el.friend.lastName}`}</p>
+                <p className="text-sm text-slate-500 truncate">{el.friend.email}</p>
               </div>
             </div>
           ))}
@@ -97,7 +113,7 @@ function ContactPage() {
       )}
     </div>
     <div className="col-span-5 flex flex-col bg-slate-50 px-3 py-5 overflow-auto">
-    <ContactDetail contact={currentContact} contactId={currentContactId} onDelete={handleDeleteContact} />
+    <ContactDetail contact={currentContact} contactId={currentContactId} onDelete={handleDeleteContact} onSave={handleUpdateContact} />
     </div>
   </>)
 };
