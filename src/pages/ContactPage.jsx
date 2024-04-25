@@ -51,6 +51,22 @@ function ContactPage() {
     handleContact(contactId);
   };
 
+  const handleDeleteContact = async (contactId) => {
+    try {
+      await apiRequest({
+        url: `/contacts/${contactId}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      const updatedContacts = dataContacts.filter((contact) => contact.friend.id !== contactId)
+      setDataContacts(updatedContacts)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
   useEffect(() => {
     fetchData()
   }, [])
@@ -81,7 +97,7 @@ function ContactPage() {
       )}
     </div>
     <div className="col-span-5 flex flex-col bg-slate-50 px-3 py-5 overflow-auto">
-    <ContactDetail contact={currentContact} contactId={currentContactId} />
+    <ContactDetail contact={currentContact} contactId={currentContactId} onDelete={handleDeleteContact} />
     </div>
   </>)
 };
