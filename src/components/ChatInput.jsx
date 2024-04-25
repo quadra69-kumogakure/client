@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { apiRequest } from "../utils/axios";
 import socket from "../utils/socket";
+import { ConvoContext } from "../pages/MainPage";
 
-function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
+function ChatInput() {
+    let {fetchConvo, currentConvo} = useContext(ConvoContext);
+
     const [message, setMessage] = useState("");
 
     const handleInputChange = (event) => {
@@ -25,7 +28,6 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
             })
 
             fetchConvo();
-            // fetchConversations();
             socket.emit("sent-message", {
                 conversationId: currentConvo.conversation.id,
                 message
@@ -38,7 +40,7 @@ function ChatInput({currentConvo, fetchConvo, fetchConversations}) {
 
     return (
         <div className="flex-none">
-            <form onSubmit={handleChatSubmit}>
+            <form onSubmit={handleChatSubmit} autoComplete="off">
                 <div className="flex bg-slate-100 rounded-full px-3 py-2">
                     <input type="text" name="message" placeholder="Type Something..." id=""
                         className="bg-slate-100 grow outline-none"
