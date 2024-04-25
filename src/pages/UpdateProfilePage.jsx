@@ -41,8 +41,8 @@ function UpdateProfilePage() {
       try {
         console.log(userData);
         // event.preventDefault();
-        console.log(UserId,"ksadjklajdklaj")
-        console.log(localStorage.access_token,'kadjasjdlkasjd')
+        // console.log(UserId,"ksadjklajdklaj")
+        // console.log(localStorage.access_token,'kadjasjdlkasjd')
         if (userData) {
           await apiRequest({
             method: "put",
