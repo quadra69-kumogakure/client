@@ -1,41 +1,19 @@
-import SideBar from "../components/Sidebar";
 import MessageList from "../components/MessageList";
 import ChatRoom from "../components/ChatRoom";
 
-import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { apiRequest } from "../utils/axios";
+import socket from "../utils/socket";
 
-// const socket = io("http://localhost:3000")
-
+export const ConvoListContext = createContext();
+export const ConvoContext = createContext();
 
 function MainPage() {
-    const [userData, setUserData] = useState({});
     const [convoList, setConvoList] = useState([]);
     const [currentConvo, setConvo] = useState({});
     const [currentConvoId, setConvoId] = useState();
 
     const [isLoading, setIsLoading] = useState(true);
-
-    const fetchUserData = async () => {
-        setIsLoading(true);
-
-        try {
-            const { data } = await apiRequest({
-                method: 'GET',
-                url: '/user-data',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-
-            setUserData(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setIsLoading(false)
-        }
-    };
 
     const fetchConversations = async () => {
         setIsLoading(true);
@@ -49,6 +27,7 @@ function MainPage() {
             })
 
             setConvoList(data.details);
+            console.log(data, ">>>>")
         } catch (error) {
             console.log(error);
         } finally {
@@ -75,11 +54,11 @@ function MainPage() {
     }
 
     const handleConvo = (event) => {
+        console.log(event, "Convo")
         setConvoId(event)
     };
 
     useEffect(() => {
-        fetchUserData()
         fetchConversations()
     }, []);
 
@@ -87,14 +66,31 @@ function MainPage() {
         fetchConvo()
     }, [currentConvoId])
 
+    useEffect(() => {
+        socket.off("sent-message")
+        socket.on("sent-message", (id, message) => {
+            console.log(`${message} --- [${id}, ${currentConvoId}]`)
+            // setConvoId(id);
+            if (currentConvoId === id) {
+                fetchConvo()
+            }
+        });
+        return () => {
+        }
+    }, [currentConvoId]);
+
     return (
         <>
             {isLoading ? (<>
                 <p>Tunggu dulu ya...</p>
             </>) : (<>
-                <MessageList convoList={convoList} handleConvo={handleConvo} />
+                <ConvoListContext.Provider value={{convoList, handleConvo}}>
+                    <MessageList/>
+                </ConvoListContext.Provider>
             </>)}
-            <ChatRoom currentConvo={currentConvo} fetchConvo={fetchConvo} fetchConversations={fetchConversations} />
+            <ConvoContext.Provider value={{currentConvo, fetchConvo, fetchConversations}}>
+                <ChatRoom/>
+            </ConvoContext.Provider>
         </>
     )
 };

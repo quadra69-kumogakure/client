@@ -1,8 +1,11 @@
-
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
+import { ConvoContext } from "../pages/MainPage";
+import { useContext } from "react";
 
-function ChatRoom({ currentConvo, fetchConvo, fetchConversations }) {
+function ChatRoom() {
+    let {currentConvo} = useContext(ConvoContext);
+
     let chatName
 
     if (currentConvo.conversation) {
@@ -16,8 +19,8 @@ function ChatRoom({ currentConvo, fetchConvo, fetchConversations }) {
                 <div className="flex-none pb-3 border-b-2 border-solid">
                     <p className="font-semibold text-slate-900 text-xl">{chatName}</p>
                 </div>
-                <ChatMessages currentConvo={currentConvo} />
-                <ChatInput currentConvo={currentConvo} fetchConvo={fetchConvo} fetchConversations={fetchConversations}/>
+                <ChatMessages/>
+                <ChatInput/>
             </>) : (<>
 
             </>)}

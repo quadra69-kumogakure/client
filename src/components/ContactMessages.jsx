@@ -1,7 +1,13 @@
+import socket from "../utils/socket";
+import { useContext } from "react";
+import { ConvoListContext } from "../pages/MainPage";
 
-function ContactMessages({ convoList, handleConvo }) {
+function ContactMessages() {
+    const {convoList, handleConvo} = useContext(ConvoListContext);
+
     const handleClick = (conversationId) => {
         handleConvo(conversationId); 
+        socket.emit("join-conversation", conversationId);
     };
 
     return (
