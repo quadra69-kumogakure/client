@@ -84,8 +84,8 @@ function MainPage() {
             {isLoading ? (<>
                 <p>Tunggu dulu ya...</p>
             </>) : (<>
-                <ConvoListContext.Provider value={{convoList}}>
-                    <MessageList handleConvo={handleConvo} />
+                <ConvoListContext.Provider value={{convoList, handleConvo}}>
+                    <MessageList/>
                 </ConvoListContext.Provider>
             </>)}
             <ConvoContext.Provider value={{currentConvo, fetchConvo, fetchConversations}}>

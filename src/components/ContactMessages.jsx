@@ -2,8 +2,8 @@ import socket from "../utils/socket";
 import { useContext } from "react";
 import { ConvoListContext } from "../pages/MainPage";
 
-function ContactMessages({ handleConvo }) {
-    const {convoList} = useContext(ConvoListContext);
+function ContactMessages() {
+    const {convoList, handleConvo} = useContext(ConvoListContext);
 
     const handleClick = (conversationId) => {
         handleConvo(conversationId); 
