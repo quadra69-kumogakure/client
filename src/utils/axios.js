@@ -1,8 +1,9 @@
 import axios from "axios";
 
 export const apiRequest = axios.create({
-    baseURL : "http://localhost:3000/"
-})
+    baseURL : "https://server-gp.daffabaihaqi.online"
+});
+
 
 export const serverRequest = axios.create({
     baseURL : ""
