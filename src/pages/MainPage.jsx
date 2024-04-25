@@ -1,10 +1,12 @@
 import MessageList from "../components/MessageList";
 import ChatRoom from "../components/ChatRoom";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { apiRequest } from "../utils/axios";
 import socket from "../utils/socket";
 
+export const ConvoListContext = createContext();
+export const ConvoContext = createContext();
 
 function MainPage() {
     const [convoList, setConvoList] = useState([]);
@@ -82,9 +84,13 @@ function MainPage() {
             {isLoading ? (<>
                 <p>Tunggu dulu ya...</p>
             </>) : (<>
-                <MessageList convoList={convoList} handleConvo={handleConvo} />
+                <ConvoListContext.Provider value={{convoList, handleConvo}}>
+                    <MessageList/>
+                </ConvoListContext.Provider>
             </>)}
-            <ChatRoom currentConvo={currentConvo} fetchConvo={fetchConvo} fetchConversations={fetchConversations} />
+            <ConvoContext.Provider value={{currentConvo, fetchConvo, fetchConversations}}>
+                <ChatRoom/>
+            </ConvoContext.Provider>
         </>
     )
 };
